@@ -10,9 +10,10 @@ from sqlalchemy.orm import relationship
 from datetime import date
 from flask_gravatar import Gravatar
 from functools import wraps
+import os
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+app.config['SECRET_KEY'] = os.environ.get("secret_key")
 ckeditor = CKEditor(app)
 Bootstrap(app)
 
@@ -23,6 +24,7 @@ db = SQLAlchemy(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -72,6 +74,7 @@ class Comment(db.Model):
     # "users.id" The users refers to the tablename of the Users class.
     # "comments" refers to the comments property in the User class.
     comment_author = relationship("User", back_populates="comments")
+
 
 db.create_all()
 
